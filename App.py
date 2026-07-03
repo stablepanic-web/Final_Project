@@ -1,4 +1,4 @@
-
+import streamlit as st
 from collections import deque
 
 # Визначаємо 4 можливі напрямки руху (Вгору, Вниз, Ліворуч, Праворуч)
