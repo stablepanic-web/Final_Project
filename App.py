@@ -1,107 +1,124 @@
+import random
 
-import numpy as np
-from keras.models import Sequential
-from keras.layers import Embedding, Flatten, Dense
-from keras.preprocessing.text import Tokenizer
-from keras.utils import pad_sequences
-from keras.models import load_model
-
-def train_sentiment_analysis_model(texts, labels, max_words, embedding_dim, num_epochs, batch_size):
+# --- Task 1: play_rock_paper_scissors ---
+def play_rock_paper_scissors(player_choice, comp_choice):
     """
-    Train a neural network model for sentiment analysis using word embeddings.
+    Play a round of the Rock-Paper-Scissors game.
 
-    Args:
-        texts (list): List of text reviews.
-        labels (list): List of corresponding sentiment labels (0 or 1).
-        max_words (int): Maximum number of words to tokenize.
-        embedding_dim (int): Dimension of word embeddings.
-        num_epochs (int): Number of training epochs.
-        batch_size (int): Batch size for training.
+    Parameters:
+        player_choice (str): The choice of Player 1. Should be one of 'rock', 'paper', or 'scissors'.
+        comp_choice (str): The choice of Computer. Should be one of 'rock', 'paper', or 'scissors'.
+
+    Returns:
+        str: The result of the round. It can be one of the following:
+             - "Tie" if both players have the same choice.
+             - "Player 1 wins" if Player 1's choice wins the round.
+             - "Comp wins" if Computer's choice wins the round.
+
+    Example:
+        >>> play_rock_paper_scissors('rock', 'paper')
+        'Comp wins'
+        >>> play_rock_paper_scissors('scissors', 'scissors')
+        'Tie'
     """
-    # 1. Tokenize the text data
-    tokenizer = Tokenizer(num_words=max_words, oov_token="<OOV>")
-    tokenizer.fit_on_texts(texts)
-    sequences = tokenizer.texts_to_sequences(texts)
-    
-    # Find the maximum sequence length for padding
-    max_len = max(len(seq) for seq in sequences) if sequences else 20
-    
-    # 2. Pad the sequences
-    X_train = pad_sequences(sequences, maxlen=max_len, padding='post', truncating='post')
-    y_train = np.array(labels)
-    
-    # 3. Build the neural network model
-    model = Sequential([
-        Embedding(input_dim=max_words, output_dim=embedding_dim, input_length=max_len),
-        Flatten(),
-        Dense(16, activation='relu'),
-        Dense(1, activation='sigmoid')  # Binary classification
-    ])
-    
-    # 4. Compile the model
-    model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
-    
-    # 5. Train the model
-    print("Training model...")
-    model.fit(X_train, y_train, epochs=num_epochs, batch_size=batch_size, verbose=1)
-    
-    # Save the model and tokenizer properties we'll need later
-    model.save('sentiment_model.h5')
-    
-    return model, tokenizer, max_len
+    valid_choices = {'rock', 'paper', 'scissors'}
 
-# --- Execution & Testing ---
+    # Normalize inputs just in case
+    player_choice = player_choice.lower()
+    comp_choice = comp_choice.lower()
 
-# Example data: text reviews and sentiment labels
-texts = [
-    "I absolutely loved this movie! The acting was fantastic.",
-    "Worst film I have ever seen in my entire life.",
-    "Truly a masterpiece, highly recommend it to everyone.",
-    "What a waste of time and money. Terrible plot.",
-    "It was okay, but pretty boring and predictable.",
-    "Amazing visuals and a brilliant performance by the lead."
-]
-labels = [1, 0, 1, 0, 0, 1]  # 1 = Positive, 0 = Negative
+    # Check if it's a tie
+    if player_choice == comp_choice:
+        result = "Tie"
 
-# Hyperparameters
-MAX_WORDS = 1000
-EMBEDDING_DIM = 16
-NUM_EPOCHS = 10
-BATCH_SIZE = 2
+    # Determine the winner based on the rules
+    elif (player_choice == 'rock' and comp_choice == 'scissors') or \
+         (player_choice == 'paper' and comp_choice == 'rock') or \
+         (player_choice == 'scissors' and comp_choice == 'paper'):
+        result = "Player 1 wins"
+    else:
+        result = "Comp wins"
 
-# Train the sentiment analysis model
-model, tokenizer, max_len = train_sentiment_analysis_model(
-    texts, labels, MAX_WORDS, EMBEDDING_DIM, NUM_EPOCHS, BATCH_SIZE
-)
+    return result
 
-# Test the model
-print("\n--- Testing the model ---")
 
-# Load the trained model
-loaded_model = load_model('sentiment_model.h5')
+# --- Task 2: computer_makes_choice ---
+def computer_makes_choice():
+    """
+    Generates the choice of the computer in the Rock-Paper-Scissors game.
 
-# Example new text reviews
-new_reviews = [
-    "The movie was absolutely amazing and wonderful!",
-    "I hated it. It was a complete waste of time."
-]
+    Parameters:
+        none.
 
-# Tokenize and pad the new text reviews
-new_sequences = tokenizer.texts_to_sequences(new_reviews)
-new_padded = pad_sequences(new_sequences, maxlen=max_len, padding='post', truncating='post')
+    Returns:
+        str: The choice of the computer. Should be one of 'rock', 'paper', or 'scissors'.
 
-# Use the trained model to predict sentiments
-predictions = loaded_model.predict(new_padded)
+    Example:
+        >>> computer_makes_choice()
+        'rock'
+        >>> computer_makes_choice()
+        'scissors'
+    """
+    valid_choices = {'rock', 'paper', 'scissors'}
 
-# Convert the predictions to binary labels (0 or 1)
-# Since sigmoid outputs a probability between 0 and 1, we threshold at 0.5
-binary_predictions = [1 if prob >= 0.5 else 0 for prob in predictions]
+    # Generate computer's choice randomly
+    # Converting the set to a list because random.choice needs an indexable sequence
+    result = random.choice(list(valid_choices))
 
-# Print the predicted sentiments for new text reviews
-for review, pred, prob in zip(new_reviews, binary_predictions, predictions):
-    sentiment = "Positive" if pred == 1 else "Negative"
-    print(f"\nReview: '{review}'")
-    print(f"Predicted Sentiment: {sentiment} (Confidence Score: {prob[0]:.4f})")
+    return result
+
+
+# --- Task 3: play_multiple_rounds ---
+def play_multiple_rounds(num_rounds):
+    """
+    Play multiple rounds of the Rock-Paper-Scissors game against the computer.
+
+    Parameters:
+        num_rounds (int): The number of rounds to play.
+
+    Returns:
+        None
+
+    Example:
+        >>> play_multiple_rounds(3)
+        Enter your choice (rock/paper/scissors): rock
+        Round 1: You chose rock. Computer chose paper. Comp wins
+
+        Enter your choice (rock/paper/scissors): paper
+        Round 2: You chose paper. Computer chose paper. Tie
+
+        Enter your choice (rock/paper/scissors): scissors
+        Round 3: You chose scissors. Computer chose rock. Comp wins
+    """
+    valid_choices = {'rock', 'paper', 'scissors'}
+
+    # Implementation of the dialog with the player
+    for round_num in range(1, num_rounds + 1):
+        # Get user input
+        player_choice = input("Enter your choice (rock/paper/scissors): ").strip().lower()
+        
+        # Simple input validation loop to ensure game flow stays correct
+        while player_choice not in valid_choices:
+            print("Invalid choice. Please choose rock, paper, or scissors.")
+            player_choice = input("Enter your choice (rock/paper/scissors): ").strip().lower()
+
+        # Get computer choice
+        comp_choice = computer_makes_choice()
+        
+        # Determine round winner
+        round_result = play_rock_paper_scissors(player_choice, comp_choice)
+        
+        # Display the result formatted exactly like the docstring example
+        print(f"Round {round_num}: You chose {player_choice}. Computer chose {comp_choice}. {round_result}\n")
+
+    return None
+
+
+# Example usage:
+if __name__ == "__main__":
+    num_rounds = int(input("Enter the number of rounds to play: "))
+    play_multiple_rounds(num_rounds)
+        
 
 
 #import streamlit as st
