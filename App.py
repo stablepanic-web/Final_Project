@@ -1,4 +1,6 @@
 import streamlit as st
+import pandas as pd
+
 from collections import deque
 
 # Визначаємо 4 можливі напрямки руху (Вгору, Вниз, Ліворуч, Праворуч)
