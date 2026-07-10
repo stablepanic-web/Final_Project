@@ -1,5 +1,8 @@
 from __future__ import annotations
 import streamlit as st
+
+import joblib
+
 from joblib import load
 import numpy as np
 from numpy.typing import ArrayLike
