@@ -26,6 +26,11 @@ def train_regression_model(X_train: ArrayLike, y_train: ArrayLike) -> LinearRegr
     """
 
     # TODO: your code here
+    # Initialize the linear regression model
+    model = LinearRegression()
+    
+    # Train the model on the provided training data
+    model.fit(X_train, y_train)
 
     return model
 
@@ -43,6 +48,7 @@ def save_regression_model(model: LinearRegression, filename: str = "linear_regre
     """
     
     # TODO: your code here
+    dump(model, filename)
 
 def evaluate_regression_model(model: LinearRegression, X_test: ArrayLike, y_test: ArrayLike):
     """
@@ -60,6 +66,11 @@ def evaluate_regression_model(model: LinearRegression, X_test: ArrayLike, y_test
     """
     
     # TODO: your code here
+    # Use the model to predict on the test features
+    y_pred = model.predict(X_test)
+    
+    # Calculate the Mean Squared Error between actual targets and predictions
+    mse = mean_squared_error(y_test, y_pred)
 
     print(f"Mean Squared Error: {mse}")
 
@@ -79,6 +90,10 @@ def save_initial_datasets(X: ArrayLike, y: ArrayLike):
     y_filename = "y.joblib"
     
     # TODO: your code here
+    # Serialize and save both datasets independently
+    dump(X, X_filename)
+    dump(y, y_filename)
+
 
 if __name__ == '__main__':
     # Generate a dataset
