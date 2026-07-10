@@ -23,7 +23,7 @@ def load_and_predict(X: ArrayLike, filename: str = "linear_regression_model.jobl
     
     # TODO: your code here
     # Load the model
-    model = load(filename)
+    model = joblib.load(filename)
     
     # Predict on the provided data
     y = model.predict(X)
@@ -94,9 +94,9 @@ def visualize_difference(input_feature: float, prediction: ArrayLike):
     X_filename = "X.joblib"
     y_filename = "y.joblib"
 
-    X = load(X_filename)
+    X = joblib.load(X_filename)
 
-    y = load(y_filename)
+    y = joblib.load(y_filename)
 
     actual_target = y[_index_of_closest(X, input_feature)]
 
