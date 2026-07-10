@@ -48,6 +48,7 @@ def create_streamlit_app():
     # TODO: your code here
 
     # Streamlit app title
+    st.title("Prodused by "two left coder" and gemini")
     st.title("Simple Regression Model Predictor")
 
 
