@@ -99,8 +99,8 @@ def visualize_difference(input_feature: float, prediction: ArrayLike):
     y = load(y_filename)
 
     #actual_target = y[_index_of_closest(X, input_feature)]
-    idx = _index_of_closest(X, input_feature)
-    actual_target = y.iloc[idx]
+    closest_idx = _index_of_closest(X, input_feature)
+    actual_target = y[closest_idx].item()
     ##prediction = float(np.ravel(prediction)[0])
 
     # Calculate difference
