@@ -48,7 +48,7 @@ def save_regression_model(model: LinearRegression, filename: str = "linear_regre
     """
     
     # TODO: your code here
-    dump(model, filename)
+    joblib.dump(model, filename)
 
 def evaluate_regression_model(model: LinearRegression, X_test: ArrayLike, y_test: ArrayLike):
     """
@@ -91,8 +91,8 @@ def save_initial_datasets(X: ArrayLike, y: ArrayLike):
     
     # TODO: your code here
     # Serialize and save both datasets independently
-    dump(X, X_filename)
-    dump(y, y_filename)
+    joblib.dump(X, X_filename)
+    joblib.dump(y, y_filename)
 
 
 if __name__ == '__main__':
