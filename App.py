@@ -48,6 +48,8 @@ def create_streamlit_app():
     # TODO: your code here
 
     # Streamlit app title
+    st.title("Simple Regression Model Predictor")
+
 
     # User input for new prediction using a slider
 
