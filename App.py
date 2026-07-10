@@ -49,7 +49,7 @@ def create_streamlit_app():
 
     # Streamlit app title
     #st.image("my_photo.jpg", caption="Це підпис під картинкою")
-    st.image("zoloti_ruki.png", caption="Prodused by \"zoloti ruky coder\" and gemini")
+    st.image("zoloti_ruky.png", caption="Prodused by \"zoloti ruky coder\" and gemini")
     st.title("Prodused by \"two left coder\" and gemini")
     st.title("Simple Regression Model Predictor")
 
