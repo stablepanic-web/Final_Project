@@ -22,6 +22,11 @@ def load_and_predict(X: ArrayLike, filename: str = "linear_regression_model.jobl
     """
     
     # TODO: your code here
+    # Load the model
+    model = load(filename)
+    
+    # Predict on the provided data
+    y = model.predict(X)
 
     return y
 
@@ -49,21 +54,27 @@ def create_streamlit_app():
 
     # Streamlit app title
     #st.image("my_photo.jpg", caption="Це підпис під картинкою")
-    st.image("zoloti_ruky.png", caption="Prodused by \"zoloti ruky coder\" and gemini")
-    st.title("Prodused by \"two left coder\" and gemini")
+    st.image("zoloti_ruky.png", caption="Prodused by \"zoloti ruky coder\" and Gemini") # st.image("zoloti_ruky.png", caption="Prodused by \"zoloti ruky coder\" and gemini")
+    #st.title("Prodused by \"zoloti ruky coder\" and Gemini")
     st.title("Simple Regression Model Predictor")
 
 
     # User input for new prediction using a slider
+    input_feature = st.slider("Select input feature value", min_value=-3.0, max_value=3.0, value=0.0, step=0.1)
 
     # Button to make a prediction
-
+    if st.button("Predict value"):
         # 1. Call load_and_predict functions.
         # Make sure you convert the input_feature to a matrix before calling load_and_predict, e.g., load_and_predict([[input_feature]])
-
+        prediction = load_and_predict([[input_feature]])
+        
         # 2. Display the prediction.
+        # Extract scalar value if prediction is an array/matrix
+        pred_value = float(np.ravel(prediction)[0])
+        st.write(f"**Predicted value:** {pred_value:.4f}")
 
         # 4. Call visualize_difference to display a plot visualizing the difference between actual and perdicted value.
+        visualize_difference(input_feature, prediction)
 
 def visualize_difference(input_feature: float, prediction: ArrayLike):
     """
@@ -98,28 +109,44 @@ def visualize_difference(input_feature: float, prediction: ArrayLike):
 
     # Plot the entire dataset (X, y) as grey dots to visualize the data distribution.
     # plt.scatter....
+    plt.scatter(X, y, color='grey', alpha=0.5, label='Dataset')
 
     # Plot the actual target value for a specific input feature as a blue dot.
     # plt.scatter...
+    plt.scatter(input_feature, actual_target, color='blue', s=100, zorder=5, label='Actual Target')
 
     # Plot the predicted target value for the same input feature as a red dot.
     # plt.scatter...
+    plt.scatter(input_feature, prediction, color='red', s=100, zorder=5, label='Predicted Target')
 
     # Display a legend on the plot to label the different scatter points (dataset, actual target, predicted target).
+    plt.legend()
 
     # Set the title of the plot, describing what is being visualized.
+    plt.title("Actual vs. Predicted Target Value")
 
     # Set the label for the x-axis to 'Feature', indicating that the x-axis represents the input features.
+    plt.xlabel('Feature')
 
     # Set the label for the y-axis to 'Target', indicating that the y-axis represents the target values (actual or predicted).
+    plt.ylabel('Target')
 
     # Enable a grid on the plot to improve readability.
+    plt.grid(True)
 
     # Draw a dashed line ('k--' for black dashed line) between the actual and predicted target values to visually represent the difference.
     # plt.plot...
+    plt.plot([input_feature, input_feature], [actual_target, prediction], 'k--', linewidth=2)
 
     # Annotate the plot with the difference between the actual and predicted target values, positioned halfway between them and offset slightly for visibility.
     # plt.annotate...
+    midpoint_y = (actual_target + prediction) / 2
+    plt.annotate(
+        f"Diff: {difference:.4f}",
+        xy=(input_feature, midpoint_y),
+        xytext=(input_feature + 0.1, midpoint_y),
+        arrowprops=dict(arrowstyle="->", color="black")
+    )
 
     st.pyplot(fig)
 
@@ -160,8 +187,8 @@ if __name__ == '__main__':
 #import streamlit as st
 #import pandas as pd
  
-st.write("""
-# My first app1
+#st.write("""
+## My first app1
 
-Hello *world!*
-""")
+#Hello *world!*
+#""")
